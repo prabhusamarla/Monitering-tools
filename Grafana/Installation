@@ -1,0 +1,61 @@
+In Grafana host install prometheus from https://prometheus.io/download/
+
+sudo su w
+wget latest linux prometheus downloadable file URL
+
+tar -xvf tarfile
+./prometheus
+we can access prometheus hostpublic-ip:9090
+
+---
+Node expoter
+
+install node expoter in all remaing nodes, which is availble in official page https://prometheus.io/download/
+
+update prometheus.yml file in prometheus host (see sample below) just update one more job for node exporter
+Check status in targets, we should see newly added node
+
+Install Grafana
+Install grafana from offical site and install it.
+
+access it from host-ip:3000
+
+Login into grafana default user admin and password: admin
+
+add data source
+import templates
+1860
+405
+11074
+
+Sample
+
+# my global config
+global:
+  scrape_interval: 15s # Set the scrape interval to every 15 seconds. Default is every 1 minute.
+  evaluation_interval: 15s # Evaluate rules every 15 seconds. The default is every 1 minute.
+  # scrape_timeout is set to the global default (10s).
+
+# Alertmanager configuration
+alerting:
+  alertmanagers:
+    - static_configs:
+        - targets:
+          # - alertmanager:9093
+
+# Load rules once and periodically evaluate them according to the global 'evaluation_interval'.
+rule_files:
+  # - "first_rules.yml"
+  # - "second_rules.yml"
+
+# A scrape configuration containing exactly one endpoint to scrape:
+# Here it's Prometheus itself.
+scrape_configs:
+  # The job name is added as a label `job=<job_name>` to any timeseries scraped from this config.
+  - job_name: 'prometheus'
+    static_configs:
+    - targets: ['localhost:9090']
+  - job_name: 'node_exporter'
+    static_configs:
+     - targets: ['34.210.209.13:9100','34.221.179.107:9100']
+
